@@ -1,61 +1,122 @@
-# da_gpt
+# Data Analysis Agent API
 
-<a target="_blank" href="https://cookiecutter-data-science.drivendata.org/">
-    <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
-</a>
+A powerful FastAPI-based REST API for data analysis using AI agents. This 	API allows you to upload CSV files, perform data analysis, and get insights using natural language queries.
 
-A short description of the project.
+## 
+    Features
 
-## Project Organization
+- Upload and process CSV files
+- Natural language data analysis queries
+- Automatic visualization generation
+- Data summary statistics
+- Health check endpoint
+- CORS support
+- Comprehensive error handling
 
-```
-├── LICENSE            <- Open-source license if one is chosen
-├── Makefile           <- Makefile with convenience commands like `make data` or `make train`
-├── README.md          <- The top-level README for developers using this project.
-├── data
-│   ├── external       <- Data from third party sources.
-│   ├── interim        <- Intermediate data that has been transformed.
-│   ├── processed      <- The final, canonical data sets for modeling.
-│   └── raw            <- The original, immutable data dump.
-│
-├── docs               <- A default mkdocs project; see www.mkdocs.org for details
-│
-├── models             <- Trained and serialized models, model predictions, or model summaries
-│
-├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-│                         the creator's initials, and a short `-` delimited description, e.g.
-│                         `1.0-jqp-initial-data-exploration`.
-│
-├── pyproject.toml     <- Project configuration file with package metadata for 
-│                         src and configuration for tools like black
-│
-├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-│
-├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-│   └── figures        <- Generated graphics and figures to be used in reporting
-│
-├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-│                         generated with `pip freeze > requirements.txt`
-│
-├── setup.cfg          <- Configuration file for flake8
-│
-└── src   <- Source code for use in this project.
-    │
-    ├── __init__.py             <- Makes src a Python module
-    │
-    ├── config.py               <- Store useful variables and configuration
-    │
-    ├── dataset.py              <- Scripts to download or generate data
-    │
-    ├── features.py             <- Code to create features for modeling
-    │
-    ├── modeling                
-    │   ├── __init__.py 
-    │   ├── predict.py          <- Code to run model inference with trained models          
-    │   └── train.py            <- Code to train models
-    │
-    └── plots.py                <- Code to create visualizations
+## Installation
+
+1. Clone the repository
+2. Install dependencies:
+
+```bash
+pip install -r requirements.txt
 ```
 
---------
+3. Set up your environment variables in a `.env` file:
 
+```
+OPENAI_API_KEY=your_api_key_here
+```
+
+## Running the API
+
+Start the server with:
+
+```bash
+uvicorn api.main:app --reload
+```
+
+The API will be available at `http://localhost:8000`
+
+## API Documentation
+
+Once the server is running, you can access the interactive API documentation at:
+
+- Swagger UI: `http://localhost:8000/docs`
+- ReDoc: `http://localhost:8000/redoc`
+
+### Endpoints
+
+#### 1. Upload CSV File
+
+- **POST** `/upload`
+- Upload a CSV file for analysis
+- Returns file information and basic statistics
+
+#### 2. Analyze Data
+
+- **POST** `/analyze`
+- Send natural language queries about your data
+- Returns analysis results, code, and visualizations
+
+#### 3. Get Data Summary
+
+- **GET** `/data/summary`
+- Get comprehensive statistics about the uploaded data
+- Returns row count, columns, summary statistics, and missing values
+
+#### 4. Health Check
+
+- **GET** `/health`
+- Check API health status
+- Returns current model information
+
+## Example Usage
+
+### Upload a CSV file
+
+```python
+import requests
+
+files = {'file': open('your_data.csv', 'rb')}
+response = requests.post('http://localhost:8000/upload', files=files)
+print(response.json())
+```
+
+### Analyze data
+
+```python
+query = {
+    "query": "What is the correlation between column A and column B?"
+}
+response = requests.post('http://localhost:8000/analyze', json=query)
+print(response.json())
+```
+
+### Get data summary
+
+```python
+response = requests.get('http://localhost:8000/data/summary')
+print(response.json())
+```
+
+## Error Handling
+
+The API includes comprehensive error handling for:
+
+- Invalid file types
+- Missing files
+- Analysis errors
+- Server errors
+
+All errors return appropriate HTTP status codes and detailed error messages.
+
+## Security
+
+- CORS middleware is enabled for cross-origin requests
+- File type validation for uploads
+- Environment variable management for sensitive data
+
+## Contributing
+
+Feel free to submit issues and enhancement requests!
